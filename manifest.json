@@ -1,0 +1,10 @@
+{
+	"id": "obsidian-canvas-conversation",
+	"name": "Canvas Conversation",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Canvas Conversation is a plugin that allows you to create a ChatGPT conversation using Canvas Cards.",
+	"author": "André Baltazar",
+	"authorUrl": "https://github.com/AndreBaltazar8",
+	"isDesktopOnly": false
+}
