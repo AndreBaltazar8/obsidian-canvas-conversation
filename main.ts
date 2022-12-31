@@ -131,7 +131,7 @@ Parent-Id: ${parentMessageId}
 Meta Data - DO NOT DELETE
 Conversation-Id: ${response.conversationId}
 Message-Id: ${response.messageId}
-Parent-Id: ${parentMessageId}
+Parent-Id: ${messageId}
 AI: true
 \`\`\``
 						);
