@@ -19,7 +19,23 @@ Some improvements to be made:
 
 # Install
 
-Install with BRAT or build yourself. I'm submitting to Obsidian Plugins.
+## From BRAT
+
+-   Install with BRAT from Obsidian Community Plugins (if you don't have it)
+-   Add this repository (AndreBaltazar8/obsidian-canvas-conversation) as a new plugin.
+
+## From Releases
+
+-   Download the latest release. Place the `main.js` and `manifest.json` files inside folder: `{{your_vault}}/.obsidian/plugins/obsidian-canvas-conversation`
+
+## From Source
+
+-   Clone this repository into your vault plugins folder.
+-   Run `pnpm install` followed by `pnpm build`
+
+## From Obsidian Community Plugins
+
+** Still pending PR approval **
 
 # Acknowledgments
 

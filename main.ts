@@ -43,6 +43,16 @@ function onCanvasMenu(menu: Menu) {
 					noAIPrompt.setText(`Cannot prompt AI results.`);
 					return;
 				}
+				if (!api) {
+					const configurePluginNode = node.canvas.createTextNode(
+						{ x: node.x + node.width + 32, y: node.y },
+						{ width: 380, height: 128 },
+						1
+					);
+					configurePluginNode.setText(`Please configure the plugin.
+Go to Settings > Canvas Conversation and fill the fields.`);
+					return;
+				}
 				let textToPrompt: string = text;
 				let conversationId: string | undefined,
 					parentMessageId: string | undefined,
@@ -177,6 +187,13 @@ export default class CanvasConversationPlugin extends Plugin {
 	settings: CanvasConversationPluginSettings;
 
 	initGPT() {
+		if (
+			!this.settings.clearanceToken ||
+			!this.settings.sessionToken ||
+			!this.settings.userAgent
+		) {
+			return;
+		}
 		api = new ChatGPTAPI({
 			userAgent: this.settings.userAgent,
 			clearanceToken: this.settings.clearanceToken,
