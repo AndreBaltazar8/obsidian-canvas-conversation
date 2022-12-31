@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-canvas-conversation",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "A plugin for Obsidian that allows you to create a canvas conversation using ChatGPT.",
 	"main": "main.js",
 	"scripts": {

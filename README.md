@@ -21,7 +21,7 @@ Some improvements to be made:
 
 ## From BRAT
 
--   Install with BRAT from Obsidian Community Plugins (if you don't have it)
+-   Install BRAT from Obsidian Community Plugins (if you don't have it)
 -   Add this repository (AndreBaltazar8/obsidian-canvas-conversation) as a new plugin.
 
 ## From Releases
