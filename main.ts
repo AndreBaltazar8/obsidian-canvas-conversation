@@ -1,4 +1,4 @@
-import { Plugin, Menu, MenuItem, ItemView } from "obsidian";
+import { Plugin, MenuItem, Notice } from "obsidian";
 import { ChatGPTAPI } from "./src/chatgpt-api";
 import {
 	CanvasConversationPluginSettings,
@@ -79,24 +79,14 @@ function onPromptChatGPT(node: any) {
 
 	// Prevent prompting if the plugin is not configured
 	if (!api) {
-		const configurePluginNode = canvas.createTextNode(
-			{ x: node.x + node.width + 32, y: node.y },
-			{ width: 380, height: 128 },
-			1
-		);
-		configurePluginNode.setText(`Please configure the plugin.
+		new Notice(`Please configure the plugin.
 Go to Settings > Canvas Conversation and fill the fields.`);
 		return;
 	}
 
 	// Prevent prompting AI results
 	if (text.includes("AI: true")) {
-		const noAIPrompt = canvas.createTextNode(
-			{ x: node.x + node.width + 32, y: node.y },
-			{ width: node.width, height: node.height },
-			1
-		);
-		noAIPrompt.setText(`Cannot prompt AI results.`);
+		new Notice(`Cannot prompt AI results.`);
 		return;
 	}
 
