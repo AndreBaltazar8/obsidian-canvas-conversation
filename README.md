@@ -12,7 +12,6 @@ Some improvements to be made:
 
 -   Proper using a streaming mechanism for the chat conversation
 -   Refreshing tokens
--   Option to clean up nodes
 -   Clean up undocumented APIs/monkey patches when they are available
 -   Better error messages
 -   Add edges between nodes (no easy way of doing it right now)
