@@ -22,7 +22,7 @@ export function performCanvasMonkeyPatch(plugin: Plugin) {
 
 	if (!canvasNodePrototype) {
 		plugin.registerEvent(
-			this.app.workspace.on("active-leaf-change", () => {
+			plugin.app.workspace.on("active-leaf-change", () => {
 				const view = app.workspace.getActiveViewOfType(ItemView);
 				checkCanvasMonkeyPatch(view);
 			})
