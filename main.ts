@@ -48,6 +48,34 @@ export default class CanvasConversationPlugin extends Plugin {
 							.setIcon("star")
 							.onClick(() => onPromptChatGPT(node));
 					});
+
+					if (nodeHasMetadata(node)) {
+						menu.addItem((item: MenuItem) => {
+							item.setTitle("Clean up ChatGPT metadata")
+								.setIcon("trash")
+								.onClick(() => cleanUpChatGPTMetadata(node));
+						});
+					}
+				}
+			)
+		);
+
+		this.registerEvent(
+			this.app.workspace.on(
+				"canvas-conversation:canvas-selection-menu",
+				(canvas, menu, nodes) => {
+					if (nodes.some((node) => nodeHasMetadata(node))) {
+						menu.addSeparator();
+						menu.addItem((item: MenuItem) => {
+							item.setTitle("Clean up ChatGPT metadata")
+								.setIcon("trash")
+								.onClick(() => {
+									nodes.forEach((node) => {
+										cleanUpChatGPTMetadata(node);
+									});
+								});
+						});
+					}
 				}
 			)
 		);
@@ -234,12 +262,43 @@ AI: true
 	node.canvas.requestSave();
 }
 
+function nodeHasMetadata(node: any) {
+	return (
+		node.text.includes("Meta Data - DO NOT DELETE") ||
+		node.text.includes("^PROMPT BELOW THIS LINE^") ||
+		node.text.includes("*Duplicated node for message tracking*")
+	);
+}
+
+function cleanUpChatGPTMetadata(node: any) {
+	if (node.text.includes("Meta Data - DO NOT DELETE")) {
+		const index = node.text.indexOf("\n```\nMeta Data - DO NOT DELETE");
+		node.setText(
+			node.text.substring(index, node.text.indexOf("```\n", index + 10))
+		);
+	}
+
+	if (node.text.includes("*Duplicated node for message tracking*")) {
+		node.setText(
+			node.text.replace(/\*Duplicated node for message tracking\*\n/, "")
+		);
+	}
+
+	if (node.text.includes("^PROMPT BELOW THIS LINE^")) {
+		node.setText(
+			node.text.substring(
+				node.text.indexOf("^PROMPT BELOW THIS LINE^") + 25
+			)
+		);
+	}
+}
+
 declare module "obsidian" {
 	interface Workspace {
 		/**
 		 * Fires when a canvas node is right-clicked.
 		 *
-		 * This is a custom event because the official API doens not support it.
+		 * This is a custom event because the official API does not support it.
 		 *
 		 * @param node The node that was right-clicked.
 		 * @param menu The menu that will be shown.
@@ -247,6 +306,20 @@ declare module "obsidian" {
 		on(
 			event: "canvas-conversation:canvas-menu",
 			callback: (node: any, menu: Menu) => void
+		): EventRef;
+
+		/**
+		 * Fires when a selection of canvas nodes is right-clicked.
+		 *
+		 * This is a custom event because the official API does not support it.
+		 *
+		 * @param canvas The canvas that the nodes are on.
+		 * @param menu The menu that will be shown.
+		 * @param nodes The nodes that were selected.
+		 */
+		on(
+			event: "canvas-conversation:canvas-selection-menu",
+			callback: (canvas: any, menu: Menu, nodes: any[]) => void
 		): EventRef;
 	}
 }
