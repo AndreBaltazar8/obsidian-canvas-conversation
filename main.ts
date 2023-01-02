@@ -144,7 +144,7 @@ Go to Settings > Canvas Conversation and fill the fields.`);
 			);
 		})
 		.catch((error) => {
-			newNode.setText(`Erorr: ${error}`);
+			newNode.setText(`Error: ${error}`);
 			canvas.requestSave();
 		});
 }
