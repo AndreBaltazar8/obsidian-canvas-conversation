@@ -18,6 +18,11 @@ Some improvements to be made:
 
 # Install
 
+## From Obsidian Community Plugins
+
+-   Open Settings -> Community Plugins
+-   Search for "Canvas Conversation" and install.
+
 ## From BRAT
 
 -   Install BRAT from Obsidian Community Plugins (if you don't have it)
@@ -31,10 +36,6 @@ Some improvements to be made:
 
 -   Clone this repository into your vault plugins folder.
 -   Run `pnpm install` followed by `pnpm build`
-
-## From Obsidian Community Plugins
-
-** Still pending PR approval **
 
 # Acknowledgments
 
