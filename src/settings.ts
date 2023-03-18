@@ -5,12 +5,16 @@ export interface CanvasConversationPluginSettings {
 	userAgent: string;
 	clearanceToken: string;
 	sessionToken: string;
+	useOfficialAPI: boolean;
+	apiKey: string;
 }
 
 export const DEFAULT_SETTINGS: CanvasConversationPluginSettings = {
 	userAgent: "",
 	clearanceToken: "",
 	sessionToken: "",
+	useOfficialAPI: false,
+	apiKey: "",
 };
 
 export class CanvasConversationSettingTab extends PluginSettingTab {
@@ -31,61 +35,93 @@ export class CanvasConversationSettingTab extends PluginSettingTab {
 		});
 
 		new Setting(containerEl)
-			.setName("User Agent")
+			.setName("Use Official API")
 			.setDesc(
-				"The user agent to use when making requests - Get from your browser to match clearence token"
+				"Enable to use the official OpenAI API instead of the unofficial API"
 			)
-			.addText((text) =>
-				text
-					.setPlaceholder("User Agent")
-					.setValue(this.plugin.settings.userAgent)
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.useOfficialAPI)
 					.onChange(async (value) => {
-						this.plugin.settings.userAgent = value;
+						this.plugin.settings.useOfficialAPI = value;
+						this.display();
 						await this.plugin.saveSettings();
 					})
 			);
 
-		new Setting(containerEl)
-			.setName("Clearance Token")
-			.setDesc(
-				"The clearance token from your browser cookies - cf_clearance"
-			)
-			.addText((text) =>
-				text
-					.setPlaceholder("Clearance Token")
-					.setValue(this.plugin.settings.clearanceToken)
-					.onChange(async (value) => {
-						this.plugin.settings.clearanceToken = value;
-						await this.plugin.saveSettings();
-					})
-			);
+		if (!this.plugin.settings.useOfficialAPI) {
+			new Setting(containerEl)
+				.setName("User Agent")
+				.setDesc(
+					"The user agent to use when making requests - Get from your browser to match clearence token"
+				)
+				.addText((text) =>
+					text
+						.setPlaceholder("User Agent")
+						.setValue(this.plugin.settings.userAgent)
+						.onChange(async (value) => {
+							this.plugin.settings.userAgent = value;
+							await this.plugin.saveSettings();
+						})
+				);
 
-		new Setting(containerEl)
-			.setName("Session Token")
-			.setDesc(
-				"The session token to use when making requests - __Secure-next-auth.session-token"
-			)
-			.addText((text) =>
-				text
-					.setPlaceholder("Session Token")
-					.setValue(this.plugin.settings.sessionToken)
-					.onChange(async (value) => {
-						this.plugin.settings.sessionToken = value;
-						await this.plugin.saveSettings();
-					})
-			);
+			new Setting(containerEl)
+				.setName("Clearance Token")
+				.setDesc(
+					"The clearance token from your browser cookies - cf_clearance"
+				)
+				.addText((text) =>
+					text
+						.setPlaceholder("Clearance Token")
+						.setValue(this.plugin.settings.clearanceToken)
+						.onChange(async (value) => {
+							this.plugin.settings.clearanceToken = value;
+							await this.plugin.saveSettings();
+						})
+				);
 
-		containerEl.createEl("p", {
-			text: "These settings can be taken from your session of ChatGPT.",
-		});
-		containerEl.createEl("p", {
-			text: "Open your browser in the ChatGPT page, inspect the page, go to Application and then Cookies, and take the appropiete values.",
-		});
-		containerEl.createEl("p", {
-			text: "For the user agent you can take it from any request from the Network tab in the inspector. Or run `navigator.userAgent` in the console.",
-		});
-		containerEl.createEl("p", {
-			text: "The tokens refresh every few hours. If you get an error, try refreshing the tokens.",
-		});
+			new Setting(containerEl)
+				.setName("Session Token")
+				.setDesc(
+					"The session token to use when making requests - __Secure-next-auth.session-token"
+				)
+				.addText((text) =>
+					text
+						.setPlaceholder("Session Token")
+						.setValue(this.plugin.settings.sessionToken)
+						.onChange(async (value) => {
+							this.plugin.settings.sessionToken = value;
+							await this.plugin.saveSettings();
+						})
+				);
+
+			containerEl.createEl("p", {
+				text: "These settings can be taken from your session of ChatGPT.",
+			});
+			containerEl.createEl("p", {
+				text: "Open your browser in the ChatGPT page, inspect the page, go to Application and then Cookies, and take the appropiete values.",
+			});
+			containerEl.createEl("p", {
+				text: "For the user agent you can take it from any request from the Network tab in the inspector. Or run `navigator.userAgent` in the console.",
+			});
+			containerEl.createEl("p", {
+				text: "The tokens refresh every few hours. If you get an error, try refreshing the tokens.",
+			});
+		} else {
+			new Setting(containerEl)
+				.setName("API Key")
+				.setDesc(
+					"The API key to use when making requests - Get from OpenAI"
+				)
+				.addText((text) =>
+					text
+						.setPlaceholder("API Key")
+						.setValue(this.plugin.settings.apiKey)
+						.onChange(async (value) => {
+							this.plugin.settings.apiKey = value;
+							await this.plugin.saveSettings();
+						})
+				);
+		}
 	}
 }

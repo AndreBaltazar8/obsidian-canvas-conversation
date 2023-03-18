@@ -1,5 +1,5 @@
-import { Plugin, MenuItem } from "obsidian";
-import { ChatGPTAPI } from "./src/chatgpt-api";
+import { Plugin, MenuItem, Notice } from "obsidian";
+import { AChatGPTAPI, ChatGPTAPI } from "./src/chatgpt-api";
 import {
 	CanvasConversationPluginSettings,
 	CanvasConversationSettingTab,
@@ -9,30 +9,46 @@ import {
 	performCanvasMonkeyPatch,
 	removeCanvasMonkeyPatch,
 } from "src/canvas-patch";
-import { onPromptChatGPT } from "src/actions/propmt-chatgpt";
+import { onPromptChatGPT } from "src/actions/prompt-chatgpt";
 import {
 	cleanUpChatGPTMetadata,
 	nodeHasMetadata,
 } from "src/actions/clean-metadata";
+import { ChatGPTAPIOfficial } from "src/chatgpt-api-official";
 
-export let api: ChatGPTAPI;
+export let api: AChatGPTAPI | null = null;
 
 export default class CanvasConversationPlugin extends Plugin {
 	settings: CanvasConversationPluginSettings;
 
 	initGPT() {
-		if (
-			!this.settings.clearanceToken ||
-			!this.settings.sessionToken ||
-			!this.settings.userAgent
-		) {
-			return;
+		api = null;
+		if (this.settings.useOfficialAPI) {
+			if (!this.settings.apiKey) {
+				new Notice(`Canvas Conversation failed: No API key provided.`);
+				return;
+			}
+			api = new ChatGPTAPIOfficial({
+				apiKey: this.settings.apiKey,
+			});
+		} else {
+			if (
+				!this.settings.clearanceToken ||
+				!this.settings.sessionToken ||
+				!this.settings.userAgent
+			) {
+				new Notice(
+					`Canvas Conversation failed: Fill all the settings.`
+				);
+				return;
+			}
+			api = new ChatGPTAPI({
+				userAgent: this.settings.userAgent,
+				clearanceToken: this.settings.clearanceToken,
+				sessionToken: this.settings.sessionToken,
+			});
 		}
-		api = new ChatGPTAPI({
-			userAgent: this.settings.userAgent,
-			clearanceToken: this.settings.clearanceToken,
-			sessionToken: this.settings.sessionToken,
-		});
+		new Notice(`Canvas Conversation initialized.`);
 	}
 
 	async onload() {

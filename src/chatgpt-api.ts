@@ -6,12 +6,7 @@ import ExpiryMap from "expiry-map";
 import pTimeout from "p-timeout";
 import { v4 as uuidv4 } from "uuid";
 import { createParser } from "eventsource-parser";
-import {
-	requestUrl,
-	RequestUrlParam,
-	RequestUrlResponse,
-	RequestUrlResponsePromise,
-} from "obsidian";
+import { requestUrl, RequestUrlParam, RequestUrlResponse } from "obsidian";
 
 import * as types from "./chatgpt-types";
 
